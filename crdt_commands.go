@@ -755,6 +755,32 @@ func (cmd *UpdateMapCommand) Name() string {
 	return cmd.getName("UpdateMap")
 }
 
+//Op was added as a way to test culster ops
+func (cmd *UpdateMapCommand) Op() *MapOperation {
+	return cmd.op
+}
+
+func (o *MapOperation) RegistersToSet() map[string][]byte {
+	return o.registersToSet
+}
+
+func (o *MapOperation) AddToSets() map[string][]string {
+	out := map[string][]string{}
+	s := o.addToSets
+	for k, val := range s {
+		l := make([]string, len(val))
+		for i, item := range val {
+			l[i] = string(item)
+		}
+		out[k] = l
+	}
+	return out
+}
+
+func (o *MapOperation) Maps() map[string]*MapOperation {
+	return o.maps
+}
+
 func (cmd *UpdateMapCommand) constructPbRequest() (proto.Message, error) {
 	pbMapOp := &rpbRiakDT.MapOp{}
 	populate(cmd.op, pbMapOp)
